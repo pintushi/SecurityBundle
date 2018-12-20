@@ -1,0 +1,39 @@
+services:
+    pintushi_security.acl.privilege_repository:
+        class: 'Pintushi\Bundle\SecurityBundle\Acl\Persistence\AclPrivilegeRepository'
+        arguments:
+            - '@Pintushi\Bundle\SecurityBundle\Acl\Persistence\AclManager'
+
+    pintushi_security.filter.configurable_permission_filter:
+        class: 'Pintushi\Bundle\SecurityBundle\Filter\AclPrivilegeConfigurableFilter'
+        arguments:
+            - '@pintushi_security.acl.configurable_permission_provider'
+
+    pintushi_security.filter.privilege_capability_filter:
+        class: 'Pintushi\Bundle\SecurityBundle\Filter\AclPrivilegeCapabilityFilter'
+        public: false
+        tags:
+            - { name: pintushi.security.filter.acl_privilege }
+
+    pintushi_security.filter.privilege_entity_filter:
+        class: 'Pintushi\Bundle\SecurityBundle\Filter\AclPrivilegeEntityFilter'
+        public: false
+        tags:
+            - { name: pintushi.security.filter.acl_privilege }
+
+    pintushi_security.acl.configurable_permission_provider:
+        class: Pintushi\Bundle\SecurityBundle\Acl\Permission\ConfigurablePermissionProvider
+        arguments:
+            - '@pintushi_security.configuration.provider.configurable_permission_configuration'
+            - '@pintushi_security.cache.provider.configurable_permission'
+
+    pintushi_security.configuration.provider.configurable_permission_configuration:
+        class: 'Pintushi\Bundle\SecurityBundle\Configuration\ConfigurablePermissionConfigurationProvider'
+        arguments:
+            - '@Pintushi\Bundle\SecurityBundle\Configuration\PermissionListConfiguration'
+            - '%kernel.bundles%'
+
+    pintushi_security.cache.provider.configurable_permission:
+        parent: doctrine_cache.abstract.chain
+        calls:
+            - [ setNamespace, [ 'pintushi_security_configurable_permission' ] ]

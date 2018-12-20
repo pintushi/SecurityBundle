@@ -1,0 +1,23 @@
+services:
+    Pintushi\Bundle\SecurityBundle\Configuration\PermissionListConfiguration:
+      class: Pintushi\Bundle\SecurityBundle\Configuration\PermissionListConfiguration
+
+    Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationProvider:
+        class: Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationProvider
+        arguments:
+            - '@Pintushi\Bundle\SecurityBundle\Configuration\PermissionListConfiguration'
+            - '%kernel.bundles%'
+
+    Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationBuilder:
+        class: Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationBuilder
+        arguments:
+            - '@validator'
+            - '@Pintushi\Bundle\SecurityBundle\Repository\PermissionRepository'
+
+    pintushi_security.cache.provider.permission:
+        parent: doctrine_cache.abstract.chain
+        autoconfigure: false
+        autowire: false
+        public: true
+        calls:
+        - [ setNamespace, [ 'pintushi_permission' ] ]

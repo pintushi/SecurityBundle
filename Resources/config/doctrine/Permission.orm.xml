@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Pintushi\Bundle\SecurityBundle\Entity\Permission" table="pintushi_security_permission">
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+        <field name="name" column="name" unique="true" type="string" length="255" />
+        <field name="label" column="label" unique="true" type="string" length="255" />
+        <field name="applyToAll" column="is_apply_to_all" type="boolean"/>
+        <field name="description" type="string" length="255" nullable="true"/>
+        <field name="groupNames" column="group_names" type="array"/>
+
+        <many-to-many target-entity="Pintushi\Bundle\SecurityBundle\Entity\PermissionEntity" field="applyToEntities">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <join-table name="pintushi_security_perm_apply_entity">
+                <join-columns>
+                    <join-column name="permission_id" referenced-column-name="id" on-delete="CASCADE"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="permission_entity_id" referenced-column-name="id" on-delete="CASCADE"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+        <many-to-many target-entity="Pintushi\Bundle\SecurityBundle\Entity\PermissionEntity"  field="excludeEntities">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <join-table name="pintushi_security_perm_excl_entity">
+                <join-columns>
+                    <join-column name="permission_id" referenced-column-name="id" on-delete="CASCADE"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="permission_entity_id" referenced-column-name="id" on-delete="CASCADE"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+    </entity>
+</doctrine-mapping>

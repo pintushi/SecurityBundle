@@ -1,0 +1,284 @@
+services:
+    _defaults:
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    pintushi.acl.voter.basic_permissions:
+        class: Pintushi\Bundle\SecurityBundle\Acl\Voter\AclVoter
+        decorates: 'security.acl.voter.basic_permissions'
+        parent: 'security.acl.voter.basic_permissions'
+        autoconfigure: false
+        autowire: false
+        public: true
+        arguments:
+            index_1: '@Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityRetrievalStrategy'
+            index_3: '@Pintushi\Bundle\SecurityBundle\Acl\Permission\PermissionMap'
+        calls:
+            - [setAclExtensionSelector, ['@pintushi_security.acl.extension_selector']]
+            - [setAclGroupProvider, ['@pintushi.acl.group_provider.chain']]
+
+    pintushi.acl.permission_manager:
+        class: Pintushi\Bundle\SecurityBundle\Acl\Permission\PermissionManager
+        public: true
+        arguments:
+            - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
+            - '@Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationProvider'
+            - '@Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationBuilder'
+            - '@pintushi_security.cache.provider.permission'
+            - '@doctrine.orm.entity_manager'
+            - '@Pintushi\Bundle\SecurityBundle\Repository\PermissionRepository'
+
+    Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdAccessor:
+        public: false
+        class: Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdAccessor
+        arguments:
+            - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
+
+    pintushi_security.acl.extension_selector:
+        public: false
+        class: Pintushi\Bundle\SecurityBundle\Acl\Extension\AclExtensionSelector
+        arguments:
+            - '@Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdAccessor'
+
+    Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityFactory:
+        class: Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityFactory
+        arguments:
+            - '@pintushi_security.acl.extension_selector'
+
+    Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityRetrievalStrategy:
+        public: false
+        class: Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityRetrievalStrategy
+        arguments:
+            - '@Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityFactory'
+
+    Pintushi\Bundle\SecurityBundle\Acl\Permission\PermissionMap:
+        public: false
+        class: Pintushi\Bundle\SecurityBundle\Acl\Permission\PermissionMap
+        arguments:
+            - '@pintushi_security.acl.extension_selector'
+
+    pintushi.acl.group_provider.chain:
+        class: Pintushi\Bundle\SecurityBundle\Acl\Group\ChainAclGroupProvider
+
+    pintushi.orm.entity_class_resolver:
+        class: Pintushi\Bundle\SecurityBundle\ORM\EntityClassResolver
+        arguments:
+            - '@doctrine'
+
+    pintushi_security.entity_security_metadata_provider:
+        class: Pintushi\Bundle\SecurityBundle\Metadata\EntitySecurityMetadataProvider
+        arguments:
+            - '@pintushi_entity_config.provider.security'
+            - '@pintushi_entity_config.provider.entity'
+            - '@doctrine'
+            - '@translator'
+            - '@pintushi_security.entity_security_metadata_provider.cache'
+            - '@event_dispatcher'
+
+    pintushi_security.entity_security_metadata_provider.cache:
+        public: false
+        autowire: false
+        autoconfigure: false
+        parent: doctrine_cache.abstract.chain
+        calls:
+            - [ setNamespace, [ 'pintushi_acl_entities' ] ]
+
+    pintushi_security.acl.extension.entity:
+        public: false
+        class: Pintushi\Bundle\SecurityBundle\Acl\Extension\EntityAclExtension
+        arguments:
+            - '@pintushi_security.acl.object_id_accessor'
+            - '@pintushi.orm.entity_class_resolver'
+            - '@pintushi_security.entity_security_metadata_provider'
+            - '@pintushi_security.owner.ownership_metadata_provider.chain'
+            - '@pintushi_security.owner.entity_owner_accessor'
+            - '@pintushi_security.owner.ownership_decision_maker.chain'
+            - '@pintushi_security.acl.permission_manager'
+            - '@pintushi_security.acl.group_provider.chain'
+            - '@pintushi_security.acl.extension.field'
+        tags:
+            - { name: pintushi_security.acl.extension, priority: 20 }
+
+    pintushi_security.acl.object_id_accessor:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdAccessor'
+        arguments:
+            - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
+
+    pintushi_security.acl.base_manager:
+        class: Pintushi\Bundle\SecurityBundle\Acl\Persistence\BaseAclManager
+
+    pintushi_security.acl.object_identity_factory:
+        class: 'Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityFactory'
+        arguments:
+            - '@pintushi_security.acl.extension_selector'
+
+    pintushi_security.acl.ace_provider:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\Acl\Persistence\AceManipulationHelper'
+
+    Pintushi\Bundle\SecurityBundle\Acl\Persistence\AclManager:
+        class: 'Pintushi\Bundle\SecurityBundle\Acl\Persistence\AclManager'
+        arguments:
+            - '@pintushi_security.acl.object_identity_factory'
+            - '@pintushi_security.acl.extension_selector'
+            - "@?security.acl.dbal.provider"
+            - '@pintushi_security.acl.ace_provider'
+        calls:
+            - [ setBaseAclManager, [ '@pintushi_security.acl.base_manager' ] ]
+
+    pintushi_security.link.sid_manager:
+        class: Pintushi\Component\DependencyInjection\ServiceLink
+        tags:
+            - { name: service_link, service: Pintushi\Bundle\SecurityBundle\Acl\Persistence\AclManager }
+
+    pintushi_security.acl.permission_manager:
+        class: 'Pintushi\Bundle\SecurityBundle\Acl\Permission\PermissionManager'
+        arguments:
+            - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
+            - '@Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationProvider'
+            - '@Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationBuilder'
+            - '@pintushi_security.cache.provider.permission'
+            - '@doctrine.orm.entity_manager'
+            - '@Pintushi\Bundle\SecurityBundle\Repository\PermissionRepository'
+
+    security.acl.underlying.cache:
+        public: false
+        class: Pintushi\Bundle\SecurityBundle\Acl\Cache\UnderlyingAclCache
+        arguments:
+            - "@security.acl.underlying.cache.doctrine.cache_impl"
+
+    security.acl.underlying.cache.doctrine.cache_impl:
+        public: false
+        autowire: false
+        autoconfigure: false
+        parent: doctrine_cache.abstract.chain
+        calls:
+            - [ setNamespace, [ 'pintushi_acl_underlying' ]]
+
+    pintushi_security.acl.dbal.provider:
+        decorates: 'security.acl.dbal.provider'
+        parent: 'security.acl.dbal.provider'
+        autowire: false
+        autoconfigure: false
+        # make ACL DBAL provider public because it can be used as standalone service, for example in migrations
+        public: true
+        arguments:
+            index_1: '@pintushi_security.acl.permission_granting_strategy'
+
+    pintushi_security.acl.cache.doctrine_decorator:
+        class: Pintushi\Bundle\SecurityBundle\Acl\Cache\AclCache
+        decorates: 'security.acl.cache.doctrine'
+        parent: 'security.acl.cache.doctrine'
+        public: false
+        autowire: false
+        autoconfigure: false
+        arguments:
+            index_1: '@pintushi_security.acl.permission_granting_strategy'
+        calls:
+            - [setUnderlyingCache, ['@security.acl.underlying.cache']]
+
+    pintushi_security.acl.group_provider.chain:
+        class: 'Pintushi\Bundle\SecurityBundle\Acl\Group\ChainAclGroupProvider'
+
+    pintushi_security.acl.extension.field:
+        public: false
+        class: Pintushi\Bundle\SecurityBundle\Acl\Extension\FieldAclExtension
+        arguments:
+            - '@pintushi_security.acl.object_id_accessor'
+            - '@pintushi_security.owner.ownership_metadata_provider.chain'
+            - '@pintushi_security.owner.ownership_decision_maker.chain'
+            - '@pintushi_security.owner.entity_owner_accessor'
+            - '@pintushi_entity_config.config_manager'
+            - '@pintushi_security.entity_security_metadata_provider'
+
+    pintushi_security.acl.voter_link:
+        class: Pintushi\Component\DependencyInjection\ServiceLink
+        tags:
+            - { name: service_link, service: ?security.acl.voter.basic_permissions }
+
+    pintushi_security.acl.permission_granting_strategy:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\Acl\Domain\PermissionGrantingStrategy'
+        calls:
+             - [setAuditLogger, ["@?security.acl.audit_logger"]]
+             - [setSecurityMetadataProvider, ["@pintushi_security.entity_security_metadata_provider"]]
+             - [setContext, ["@?pintushi_security.acl.voter_link"]]
+
+    pintushi_security.acl.annotation_provider:
+        class: Pintushi\Bundle\SecurityBundle\Metadata\AclAnnotationProvider
+        arguments:
+            - '@pintushi.orm.entity_class_resolver'
+            - '@pintushi_security.acl.annotation_provider.cache'
+
+    pintushi_security.acl.annotation_provider.cache:
+        public: false
+        autowire: false
+        autoconfigure: false
+        parent: doctrine_cache.abstract.chain
+        calls:
+            - [ setNamespace, [ 'pintushi_acl_annotations' ] ]
+
+    pintushi_security.acl.annotation_loader:
+        public: false
+        class: Pintushi\Bundle\SecurityBundle\Annotation\Loader\AclAnnotationLoader
+        arguments:
+            - '@annotation_reader'
+        tags:
+            - { name: pintushi_security.acl.config_loader }
+
+    pintushi_security.acl.config_loader:
+        public: false
+        class: Pintushi\Bundle\SecurityBundle\Annotation\Loader\AclConfigLoader
+        tags:
+            - { name: pintushi_security.acl.config_loader }
+
+    pintushi_security.acl.annotation_provider.cache.warmer:
+        public: false
+        class:   Pintushi\Bundle\SecurityBundle\Cache\AclAnnotationCacheWarmer
+        arguments:
+            - '@pintushi_security.acl.annotation_provider'
+        tags:
+            - { name: kernel.cache_warmer, priority: 5 }
+
+    pintushi_security.acl.annotation_provider.cache.clearer:
+        public: false
+        class:  Pintushi\Bundle\SecurityBundle\Cache\AclAnnotationCacheClearer
+        arguments:
+            - '@pintushi_security.acl.annotation_provider'
+        tags:
+            - { name: kernel.cache_clearer }
+
+    pintushi_security.acl.provider:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\Acl\Domain\RootBasedAclProvider'
+        arguments:
+            - '@pintushi_security.acl.object_identity_factory'
+        calls:
+            - [setUnderlyingCache, ["@security.acl.underlying.cache"]]
+
+    pintushi_security.acl.extension.action:
+          public: false
+          class: 'Pintushi\Bundle\SecurityBundle\Acl\Extension\ActionAclExtension'
+          arguments:
+              - '@pintushi_security.action_metadata_provider'
+          tags:
+              - { name: pintushi_security.acl.extension, priority: 10 }
+
+    pintushi_security.action_metadata_provider:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\Metadata\ActionMetadataProvider'
+        arguments:
+            - '@pintushi_security.acl.annotation_provider'
+            - '@translator'
+            - '@pintushi_security.action_metadata_provider.cache'
+
+    pintushi_security.action_metadata_provider.cache:
+        public: false
+        autowire: false
+        autoconfigure: false
+        parent: doctrine_cache.abstract.chain
+        calls:
+            - [ setNamespace, [ 'pintushi_acl_actions' ] ]
+

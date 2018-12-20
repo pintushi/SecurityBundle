@@ -1,0 +1,45 @@
+services:
+    Pintushi\Bundle\SecurityBundle\ORM\Walker\AclHelper:
+        class: 'Pintushi\Bundle\SecurityBundle\ORM\Walker\AclHelper'
+        arguments:
+             - '@pintushi_security.orm.ownership_sql_walker_builder'
+             - '@event_dispatcher'
+             - '@pintushi_security.orm.acl_conditional_factor_builder'
+
+    pintushi.acl_helper:
+        alias:  'Pintushi\Bundle\SecurityBundle\ORM\Walker\AclHelper'
+
+    pintushi_security.orm.ownership_sql_walker_builder:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\ORM\Walker\OwnershipConditionDataBuilder'
+        arguments:
+            - '@pintushi_security.token_accessor'
+            - '@security.authorization_checker'
+            - '@pintushi_security.acl.object_id_accessor'
+            - '@pintushi_security.entity_security_metadata_provider'
+            - '@pintushi_security.owner.ownership_metadata_provider.chain'
+            - '@pintushi_security.ownership_tree_provider.chain'
+            - '@?security.acl.voter.basic_permissions'
+        calls:
+            - [setAclGroupProvider, ['@pintushi_security.acl.group_provider.chain']]
+
+    pintushi_security.orm.acl_conditional_factor_builder:
+        class: 'Pintushi\Bundle\SecurityBundle\ORM\Walker\AclConditionalFactorBuilder'
+
+
+    pintushi_security.walker_hint_provider.current_user:
+        public: false
+        class: Pintushi\Bundle\SecurityBundle\ORM\Walker\CurrentUserWalkerHintProvider
+        arguments:
+             - '@pintushi_security.token_accessor'
+
+    pintushi_security.query_hint.filter_by_current_user:
+        public: false
+        abstract: true
+        tags:
+            -
+                name: pintushi_security.query_hint
+                hint: pintushi_security.filter_by_current_user
+                alias: HINT_FILTER_BY_CURRENT_USER
+                tree_walker: Pintushi\Bundle\SecurityBundle\ORM\Walker\CurrentUserWalker
+                walker_hint_provider: pintushi_security.walker_hint_provider.current_user

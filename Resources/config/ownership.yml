@@ -1,0 +1,152 @@
+parameters:
+    pintushi_security.entity.owners:
+        organization: 'Pintushi\Bundle\OrganizationBundle\Entity\Organization'
+        business_unit: 'Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit'
+        user: 'Pintushi\Bundle\UserBundle\Entity\User'
+
+services:
+    Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessor:
+        class: Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessor
+        arguments:
+            - '@security.token_storage'
+
+    pintushi_security.token_accessor:
+        alias:  'Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessor'
+
+    Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface: '@Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessor'
+
+    pintushi_security.owner.entity_owner_accessor:
+        class: 'Pintushi\Bundle\SecurityBundle\Owner\EntityOwnerAccessor'
+        arguments:
+            - '@pintushi_security.owner.ownership_metadata_provider.chain'
+
+    pintushi_security.owner.ownership_metadata_provider.chain:
+        public: true
+        class: 'Pintushi\Bundle\SecurityBundle\Owner\Metadata\ChainOwnershipMetadataProvider'
+        calls:
+            - [setDefaultProvider, ['@pintushi_security.owner.ownership_metadata_provider']]
+
+    pintushi_security.owner.ownership_metadata_provider:
+        class: 'Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider'
+        arguments:
+            - '%pintushi_security.entity.owners%'
+            - '@pintushi_entity_config.config_manager'
+            - '@pintushi.orm.entity_class_resolver'
+            - '@pintushi_security.token_accessor'
+            - '@pintushi_security.owner.ownership_metadata_provider.cache'
+        tags:
+            - { name: pintushi_security.owner.metadata_provider, alias: default }
+
+    pintushi_security.owner.ownership_metadata_provider.cache:
+        parent: doctrine_cache.abstract.chain
+        public: false
+        calls:
+            - [ setNamespace, [ 'pintushi_acl_entity_ownership' ] ]
+
+    pintushi_security.owner.ownership_config_listener:
+        class: Pintushi\Bundle\SecurityBundle\EventListener\OwnershipConfigListener
+        arguments:
+            - '@pintushi_security.owner.ownership_metadata_provider.chain'
+        tags:
+            - { name: kernel.event_listener, event: pintushi_entity_config.pre_flush, method: preFlush }
+
+    pintushi_security.owner.ownership_metadata_provider.cache.warmer:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\Cache\OwnershipMetadataCacheWarmer'
+        arguments:
+            - '@pintushi_security.owner.ownership_metadata_provider.chain'
+        tags:
+            - { name: kernel.cache_warmer }
+
+    pintushi_security.owner.ownership_metadata_provider.cache.clearer:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\Cache\OwnershipMetadataCacheClearer'
+        arguments:
+            - '@pintushi_security.owner.ownership_metadata_provider.chain'
+        tags:
+            - { name: kernel.cache_clearer }
+
+    pintushi_security.owner.ownership_decision_maker.chain:
+        class: 'Pintushi\Bundle\SecurityBundle\Owner\ChainEntityOwnershipDecisionMaker'
+
+    pintushi_security.owner.ownership_query_helper:
+        class: Pintushi\Bundle\SecurityBundle\Owner\OwnershipQueryHelper
+        public: false
+        arguments:
+            - '@pintushi_security.owner.ownership_metadata_provider.chain'
+            - '@pintushi.orm.entity_class_resolver'
+
+
+    pintushi_security.ownership_tree_provider.chain:
+        class: 'Pintushi\Bundle\SecurityBundle\Owner\ChainOwnerTreeProvider'
+        calls:
+            - [setDefaultProvider, ['@pintushi_security.ownership_tree_provider']]
+
+    pintushi_security.ownership_tree_provider:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\Owner\OwnerTreeProvider'
+        arguments:
+            - '@doctrine'
+            - '@pintushi_security.database_checker'
+            - '@pintushi_security.ownership_tree_provider.cache'
+            - '@pintushi_security.owner.ownership_metadata_provider'
+            - '@security.token_storage'
+        tags:
+            - { name: pintushi_security.ownership.tree_provider }
+
+    pintushi_security.ownership_tree.cache.warmer:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\Cache\OwnerTreeCacheWarmer'
+        arguments:
+            - '@pintushi_security.ownership_tree_provider.chain'
+        tags:
+            - { name: kernel.cache_warmer }
+
+    pintushi_security.ownership_tree.cache.cleaner:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\Cache\OwnerTreeCacheCleaner'
+        arguments:
+            - '@pintushi_security.ownership_tree_provider.chain'
+        tags:
+            - { name: kernel.cache_clearer }
+
+    pintushi_security.ownership_tree_subscriber:
+        class: 'Pintushi\Bundle\SecurityBundle\EventListener\OwnerTreeListener'
+        arguments:
+            - '@pintushi_security.ownership_tree_provider.chain'
+        calls:
+            - ['addSupportedClass', ['Pintushi\Bundle\UserBundle\Entity\User', [owner, organization], [businessUnits, organizations]]]
+            - ['addSupportedClass', ['Pintushi\Bundle\OrganizationBundle\Entity\BusinessUnit', [owner, organization], [users]]]
+            - ['addSupportedClass', ['Pintushi\Bundle\OrganizationBundle\Entity\Organization']]
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+
+    pintushi_security.database_checker:
+        public: false
+        class: Pintushi\Bundle\EntityConfigBundle\Config\DatabaseChecker
+        arguments:
+            - '@doctrine'
+            - ['pintushi_user']
+        tags:
+            - { name: pintushi_entity.database_checker }
+
+    pintushi_security.ownership_tree_provider.cache:
+        public: false
+        autoconfigure: false
+        autowire: false
+        parent: doctrine_cache.abstract.chain
+        calls:
+            - [ setNamespace, [ 'pintushi_acl_owner_tree' ] ]
+
+    pintushi_security.owner.decision_maker:
+        public: false
+        class: 'Pintushi\Bundle\SecurityBundle\Owner\EntityOwnershipDecisionMaker'
+        arguments:
+            - '@pintushi_security.ownership_tree_provider.chain'
+            - '@pintushi_security.acl.object_id_accessor'
+            - '@pintushi_security.owner.entity_owner_accessor'
+            - '@pintushi_security.owner.ownership_metadata_provider.chain'
+            - '@pintushi_security.token_accessor'
+        tags:
+           - { name: pintushi_security.owner.ownership_decision_maker }
+
