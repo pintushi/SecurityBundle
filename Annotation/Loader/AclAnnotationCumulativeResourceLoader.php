@@ -4,9 +4,9 @@ namespace Pintushi\Bundle\SecurityBundle\Annotation\Loader;
 
 use Symfony\Component\Finder\Finder;
 
-use Pintushi\Component\Config\CumulativeResource;
-use Pintushi\Component\Config\CumulativeResourceInfo;
-use Pintushi\Component\Config\Loader\CumulativeResourceLoader;
+use Oro\Component\Config\CumulativeResource;
+use Oro\Component\Config\CumulativeResourceInfo;
+use Oro\Component\Config\Loader\CumulativeResourceLoader;
 
 class AclAnnotationCumulativeResourceLoader implements CumulativeResourceLoader
 {

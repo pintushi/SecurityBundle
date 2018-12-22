@@ -8,8 +8,8 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 
-use Pintushi\Component\Config\Loader\CumulativeConfigLoader;
-use Pintushi\Component\Config\Loader\YamlCumulativeFileLoader;
+use Oro\Component\Config\Loader\CumulativeConfigLoader;
+use Oro\Component\Config\Loader\YamlCumulativeFileLoader;
 
 final class PintushiSecurityExtension extends Extension
 {

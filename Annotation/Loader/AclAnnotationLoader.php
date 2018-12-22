@@ -4,7 +4,7 @@ namespace Pintushi\Bundle\SecurityBundle\Annotation\Loader;
 
 use Doctrine\Common\Annotations\Reader as AnnotationReader;
 
-use Pintushi\Component\Config\Loader\CumulativeConfigLoader;
+use Oro\Component\Config\Loader\CumulativeConfigLoader;
 use Pintushi\Bundle\SecurityBundle\Metadata\AclAnnotationStorage;
 
 class AclAnnotationLoader implements AclAnnotationLoaderInterface

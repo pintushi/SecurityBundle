@@ -38,18 +38,6 @@ services:
         tags:
             - { name: 'monolog.logger', channel: 'security'}
 
-    Pintushi\Bundle\SecurityBundle\Controller\OwnershipContextAction:
-        class: Pintushi\Bundle\SecurityBundle\Controller\OwnershipContextAction
-        public: true
-        arguments:
-            - '@pintushi_security.owner.ownership_metadata_provider.chain'
-            - '@pintushi_security.authorization_checker'
-            - '@pintushi_security.token_accessor'
-            - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
-            - '@api_platform.metadata.resource.name_collection_factory'
-            - '@api_platform.metadata.resource.metadata_factory'
-            - '@pintushi.acl.voter.basic_permissions'
-
     pintushi_security.acl.configurable_permission_provider:
         class: Pintushi\Bundle\SecurityBundle\Acl\Permission\ConfigurablePermissionProvider
         arguments:

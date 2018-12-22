@@ -9,8 +9,8 @@ use Pintushi\Bundle\SecurityBundle\Annotation\Loader\AclAnnotationLoader;
 use Pintushi\Bundle\SecurityBundle\DependencyInjection\PintushiSecurityExtension;
 use Pintushi\Bundle\SecurityBundle\Metadata\AclAnnotationProvider;
 use Pintushi\Bundle\SecurityBundle\Metadata\ActionMetadataProvider;
-use Pintushi\Component\Config\Dumper\ConfigMetadataDumperInterface;
-use Pintushi\Component\Config\Dumper\CumulativeConfigMetadataDumper;
+use Oro\Component\Config\Dumper\ConfigMetadataDumperInterface;
+use Oro\Component\Config\Dumper\CumulativeConfigMetadataDumper;
 
 class AclListener
 {

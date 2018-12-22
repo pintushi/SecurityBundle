@@ -4,9 +4,9 @@ namespace Pintushi\Bundle\SecurityBundle\Configuration;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-use Pintushi\Component\Config\Loader\CumulativeConfigLoader;
-use Pintushi\Component\Config\Loader\YamlCumulativeFileLoader;
-use Pintushi\Component\Config\Merger\ConfigurationMerger;
+use Oro\Component\Config\Loader\CumulativeConfigLoader;
+use Oro\Component\Config\Loader\YamlCumulativeFileLoader;
+use Oro\Component\Config\Merger\ConfigurationMerger;
 
 class PermissionConfigurationProvider
 {

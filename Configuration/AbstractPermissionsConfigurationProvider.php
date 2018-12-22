@@ -2,9 +2,9 @@
 
 namespace Pintushi\Bundle\SecurityBundle\Configuration;
 
-use Pintushi\Component\Config\Loader\CumulativeConfigLoader;
-use Pintushi\Component\Config\Loader\YamlCumulativeFileLoader;
-use Pintushi\Component\Config\Merger\ConfigurationMerger;
+use Oro\Component\Config\Loader\CumulativeConfigLoader;
+use Oro\Component\Config\Loader\YamlCumulativeFileLoader;
+use Oro\Component\Config\Merger\ConfigurationMerger;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 abstract class AbstractPermissionsConfigurationProvider
