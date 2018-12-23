@@ -19,7 +19,7 @@ services:
             - '@pintushi_security.entity_security_metadata_provider'
             - '@pintushi_security.owner.ownership_metadata_provider.chain'
             - '@pintushi_security.ownership_tree_provider.chain'
-            - '@?security.acl.voter.basic_permissions'
+            - '@pintushi.acl.voter.basic_permissions'
         calls:
             - [setAclGroupProvider, ['@pintushi_security.acl.group_provider.chain']]
 

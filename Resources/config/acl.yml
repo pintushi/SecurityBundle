@@ -196,7 +196,7 @@ services:
     pintushi_security.acl.voter_link:
         class: Pintushi\Component\DependencyInjection\ServiceLink
         tags:
-            - { name: service_link, service: ?security.acl.voter.basic_permissions }
+            - { name: service_link, service: pintushi.acl.voter.basic_permissions }
 
     pintushi_security.acl.permission_granting_strategy:
         public: false
