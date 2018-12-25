@@ -3,7 +3,7 @@
 namespace Pintushi\Bundle\SecurityBundle\Repository;
 
 use Doctrine\ORM\Query\Expr;
-use Pintushi\Bundle\CoreBundle\Doctrine\ORM\ServiceEntityRepository;
+use Videni\Bundle\RestBundle\Doctrine\ORM\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Pintushi\Bundle\SecurityBundle\Entity\Permission;
