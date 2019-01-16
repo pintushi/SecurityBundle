@@ -13,11 +13,3 @@ services:
         arguments:
             - '@validator'
             - '@Pintushi\Bundle\SecurityBundle\Repository\PermissionRepository'
-
-    pintushi_security.cache.provider.permission:
-        parent: doctrine_cache.abstract.chain
-        autoconfigure: false
-        autowire: false
-        public: true
-        calls:
-        - [ setNamespace, [ 'pintushi_permission' ] ]

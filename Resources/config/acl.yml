@@ -25,7 +25,7 @@ services:
             - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
             - '@Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationProvider'
             - '@Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationBuilder'
-            - '@pintushi_security.cache.provider.permission'
+            - '@doctrine_cache.providers.permission'
             - '@doctrine.orm.entity_manager'
             - '@Pintushi\Bundle\SecurityBundle\Repository\PermissionRepository'
 
@@ -139,7 +139,7 @@ services:
             - '@Pintushi\Bundle\SecurityBundle\ORM\DoctrineHelper'
             - '@Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationProvider'
             - '@Pintushi\Bundle\SecurityBundle\Configuration\PermissionConfigurationBuilder'
-            - '@pintushi_security.cache.provider.permission'
+            - '@doctrine_cache.providers.permission'
             - '@doctrine.orm.entity_manager'
             - '@Pintushi\Bundle\SecurityBundle\Repository\PermissionRepository'
 

@@ -161,7 +161,7 @@ class PermissionManager
             $map = $this->getPermissionsMap();
             if (isset($map[$name])) {
                 $this->loadedPermissions[$name] = $this->entityManager
-                    ->getReference('AppSecurityBundle:Permission', $map[$name]);
+                    ->getReference(Permission::class, $map[$name]);
             } else {
                 $this->loadedPermissions[$name] = null;
             }
@@ -185,9 +185,9 @@ class PermissionManager
         ];
 
         foreach ($permissions as $permission) {
-            $cache[static::CACHE_PERMISSIONS][$permission->getName()] = ($permission->getId()-1)%$permissionsCount+1;
+            $cache[static::CACHE_PERMISSIONS][$permission->getName()] = $permission->getId();
             foreach ($permission->getGroupNames() as $group) {
-                $cache[static::CACHE_GROUPS][$group][$permission->getName()] = ($permission->getId()-1)%$permissionsCount+1;
+                $cache[static::CACHE_GROUPS][$group][$permission->getName()] = $permission->getId();
             }
         }
 
