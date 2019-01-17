@@ -556,7 +556,7 @@ class EntityAclExtension extends AbstractAccessLevelAclExtension
      */
     protected function getMaskBuilderConst($identity, $constName)
     {
-        return $this->getEntityMaskBuilder($identity)->getMask($constName);
+       return $this->getEntityMaskBuilder($identity)->getMask($constName);
     }
 
     /**
@@ -574,8 +574,11 @@ class EntityAclExtension extends AbstractAccessLevelAclExtension
         array_unshift($map, array_pop($map));
 
         $allPermissions = $this->permissionManager->getPermissionsMap();
+        $permissionsCount = count($allPermissions);
 
         foreach ($allPermissions as $permission => $pk) {
+            $pk = ($pk - 1) % $permissionsCount + 1;
+
             $identity = (int) (($pk - 1) / EntityMaskBuilder::MAX_PERMISSIONS_IN_MASK);  // 5/3取整数，0或者1
             $identity <<= $levelsCount * EntityMaskBuilder::MAX_PERMISSIONS_IN_MASK;  // 0向左移动15位还是0， 1移动15位是32768
             $number = $map[$pk % EntityMaskBuilder::MAX_PERMISSIONS_IN_MASK];  // 1到5与3求余为0，1，2
