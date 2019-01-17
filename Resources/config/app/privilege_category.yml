@@ -1,0 +1,13 @@
+pintushi_privilege_categories:
+    account_management:
+        label: 账户
+        tab: true
+    application:
+        label: 系统
+        tab: false
+        priority: 20
+    role:
+        label: 角色
+        priority: 20
+        visible: true
+        tab: true
