@@ -24,12 +24,13 @@ use Pintushi\Bundle\SecurityBundle\ORM\Walker\Condition\JoinAssociationCondition
 use Pintushi\Bundle\SecurityBundle\ORM\Walker\Condition\SubRequestAclConditionStorage;
 use Pintushi\Bundle\SecurityBundle\ORM\Walker\AclWalker;
 use Pintushi\Bundle\UserBundle\Entity\User;
+use Videni\Bundle\RestBundle\Util\AclHelperInterface;
 
 /**
  * Class ACLHelper
  * This class analyse input query for acl and mark it with APP_ACL_WALKER if it need to be ACL protected.
  */
-class AclHelper
+class AclHelper implements AclHelperInterface
 {
     const APP_ACL_WALKER = AclWalker::class;
     const APP_USER_CLASS = User::class;

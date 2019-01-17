@@ -21,7 +21,10 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('pintushi_security');
+        $rootNode = $treeBuilder->root('pintushi_security')
+            ->children()
+                ->scalarNode('cache_provider')->defaultValue('array')->end()
+        ;
 
         return $treeBuilder;
     }
