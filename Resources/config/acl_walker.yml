@@ -1,10 +1,13 @@
 services:
+    _defaults:
+        autowire: false
+        autoconfigure: false
+        public: true
+
     Pintushi\Bundle\SecurityBundle\ORM\Walker\AclHelper:
         class: 'Pintushi\Bundle\SecurityBundle\ORM\Walker\AclHelper'
         arguments:
-             - '@pintushi_security.orm.ownership_sql_walker_builder'
-             - '@event_dispatcher'
-             - '@pintushi_security.orm.acl_conditional_factor_builder'
+             - '@service_container'
 
     pintushi.acl_helper:
         alias:  'Pintushi\Bundle\SecurityBundle\ORM\Walker\AclHelper'
@@ -15,8 +18,8 @@ services:
         public: false
         class: 'Pintushi\Bundle\SecurityBundle\ORM\Walker\OwnershipConditionDataBuilder'
         arguments:
-            - '@pintushi_security.token_accessor'
             - '@security.authorization_checker'
+            - '@security.token_storage'
             - '@pintushi_security.acl.object_id_accessor'
             - '@pintushi_security.entity_security_metadata_provider'
             - '@pintushi_security.owner.ownership_metadata_provider.chain'
@@ -25,13 +28,7 @@ services:
         calls:
             - [setAclGroupProvider, ['@pintushi_security.acl.group_provider.chain']]
 
-    pintushi_security.orm.acl_conditional_factor_builder:
-        class: 'Pintushi\Bundle\SecurityBundle\ORM\Walker\AclConditionalFactorBuilder'
-
-
-    pintushi_security.walker_hint_provider.current_user:
-        public: false
-        class: Pintushi\Bundle\SecurityBundle\ORM\Walker\CurrentUserWalkerHintProvider
+    Pintushi\Bundle\SecurityBundle\ORM\Walker\CurrentUserWalkerHintProvider:
         arguments:
              - '@pintushi_security.token_accessor'
 
@@ -45,3 +42,22 @@ services:
                 alias: HINT_FILTER_BY_CURRENT_USER
                 tree_walker: Pintushi\Bundle\SecurityBundle\ORM\Walker\CurrentUserWalker
                 walker_hint_provider: pintushi_security.walker_hint_provider.current_user
+
+    pintushi_security.access_rule.chain_access_rule:
+        class: Pintushi\Bundle\SecurityBundle\AccessRule\ChainAccessRule
+
+    pintushi_security.access_rule.acl:
+        class: Pintushi\Bundle\SecurityBundle\AccessRule\AclAccessRule
+        arguments:
+            - '@pintushi_security.orm.ownership_sql_walker_builder'
+            - '@pintushi_security.owner.ownership_metadata_provider.chain'
+        tags:
+            - { name: pintushi_security.access_rule }
+
+    pintushi_security.access_rule.available_owner_check:
+        class: Pintushi\Bundle\SecurityBundle\AccessRule\AvailableOwnerAccessRule
+        arguments:
+            - '@pintushi_security.orm.ownership_sql_walker_builder'
+            - '@pintushi_security.owner.ownership_metadata_provider.chain'
+        tags:
+            - { name: pintushi_security.access_rule }

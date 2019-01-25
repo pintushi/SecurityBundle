@@ -4,60 +4,51 @@ namespace Pintushi\Bundle\SecurityBundle\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
-use Pintushi\Bundle\OrganizationBundle\Entity\Organization;
-use Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityFactory;
-use Pintushi\Bundle\SecurityBundle\Acl\Extension\ObjectIdentityHelper;
-use Pintushi\Bundle\SecurityBundle\Authentication\Token\OrganizationContextTokenInterface;
-use Pintushi\Bundle\SecurityBundle\Event\OrganizationSwitchAfter;
-use Pintushi\Bundle\SecurityBundle\Event\OrganizationSwitchBefore;
-use Pintushi\Bundle\UserBundle\Entity\User;
+use Pintushi\Bundle\SecurityBundle\Acl\Persistence\AclManager;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class AclPermissionController extends Controller
 {
+    private $aclManager;
+    private $translator;
+
+    public function __construct(AclManager $aclManager, TranslatorInterface $translator)
+    {
+        $this->aclManager = $aclManager;
+        $this->translator = $translator;
+    }
+
     /**
      * @Route(
-     *  "/acl-access-levels/{oid}/{permission}",
-     *  name="pintushi_security_access_levels",
-     *  requirements={"oid"="[\w]+:[\w\:\(\)\|]+", "permission"="[\w/]+"},
-     *  defaults={"_format"="json", "permission"=null}
+     *  "/acl-access-levels/oid/{oid}/permission/{permission}",
+     *  name="app_security_access_levels",
+     *  requirements={"oid"=".+", "permission"="[\w]+"},
+     *  defaults={
+     *      "_format"="json",
+     *      "_api_respond"= true
+     *  }
      * )
-     * @Template
      *
      * @param string $oid
      * @param string $permission
      *
      * @return array
      */
-    public function aclAccessLevelsAction($oid, $permission = null)
+    public function aclAccessLevels($oid, $permission = null)
     {
-        if (ObjectIdentityHelper::getExtensionKeyFromIdentityString($oid) === 'entity') {
-            $entity = ObjectIdentityHelper::getClassFromIdentityString($oid);
-            if ($entity !== ObjectIdentityFactory::ROOT_IDENTITY_TYPE) {
-                if (ObjectIdentityHelper::isFieldEncodedKey($entity)) {
-                    list($className, $fieldName) = ObjectIdentityHelper::decodeEntityFieldInfo($entity);
-                    $oid = ObjectIdentityHelper::encodeIdentityString(
-                        'entity',
-                        ObjectIdentityHelper::encodeEntityFieldInfo(
-                            $this->get('oro_entity.routing_helper')->resolveEntityClass($className),
-                            $fieldName
-                        )
-                    );
-                } else {
-                    $oid = ObjectIdentityHelper::encodeIdentityString(
-                        'entity',
-                        $this->get('oro_entity.routing_helper')->resolveEntityClass($entity)
-                    );
-                }
-            }
-        }
-
         $levels = $this
-            ->get('oro_security.acl.manager')
+            ->aclManager
             ->getAccessLevels($oid, $permission);
 
-        return ['levels' => $levels];
+        $result = [];
+        foreach ($levels as $accessLevel => $accessLevelLabel) {
+            $result[] =   [
+                'access_level' => $accessLevel,
+                'access_level_label' => $this->translator->trans('app.security.access_level.'.$accessLevelLabel),
+            ];
+        }
+
+        return $result;
     }
 }

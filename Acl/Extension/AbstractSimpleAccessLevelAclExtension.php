@@ -15,7 +15,6 @@ abstract class AbstractSimpleAccessLevelAclExtension extends AbstractAccessLevel
      */
     public function getAccessLevel($mask, $permission = null, $object = null)
     {
-        var_dump($mask);exit;
         if (0 === $mask) {
             return AccessLevel::NONE_LEVEL;
         }

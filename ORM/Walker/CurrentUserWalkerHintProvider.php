@@ -2,24 +2,22 @@
 
 namespace Pintushi\Bundle\SecurityBundle\ORM\Walker;
 
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
-use Pintushi\Component\DoctrineUtils\ORM\QueryWalkerHintProviderInterface;
 use Pintushi\Bundle\SecurityBundle\Authentication\Token\OrganizationContextTokenInterface;
 use Pintushi\Bundle\UserBundle\Entity\AbstractUser;
-use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessor;
+use Oro\Component\DoctrineUtils\ORM\QueryWalkerHintProviderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class CurrentUserWalkerHintProvider implements QueryWalkerHintProviderInterface
 {
     /** @var TokenStorageInterface */
-    protected $tokenAccessor;
+    protected $tokenStorage;
 
     /**
-     * @param TokenAccessor $tokenAccessor
+     * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct(TokenAccessor $tokenAccessor)
+    public function __construct(TokenStorageInterface $tokenStorage)
     {
-        $this->tokenAccessor = $tokenAccessor;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -29,7 +27,7 @@ class CurrentUserWalkerHintProvider implements QueryWalkerHintProviderInterface
     {
         $securityContext = [];
 
-        $token = $this->tokenAccessor->getToken();
+        $token = $this->tokenStorage->getToken();
         if ($token) {
             $user = $token->getUser();
             if ($user instanceof AbstractUser) {

@@ -3,11 +3,10 @@
 namespace Pintushi\Bundle\SecurityBundle\Owner\Metadata;
 
 use Doctrine\Common\Cache\CacheProvider;
-
 use Pintushi\Bundle\SecurityBundle\ORM\EntityClassResolver;
 use Pintushi\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Pintushi\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Pintushi\Bundle\OrganizationBundle\Form\Type\OwnershipType;
+use Pintushi\Bundle\OrganizationBundle\Ownership\OwnershipType;
 use Pintushi\Bundle\SecurityBundle\Acl\AccessLevel;
 use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Pintushi\Bundle\UserBundle\Entity\User;
@@ -87,33 +86,6 @@ class OwnershipMetadataProvider extends AbstractOwnershipMetadataProvider
         $this->ensureOwningEntityClassesInitialized();
 
         return $this->organizationClass;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @deprecated since 2.3, use getUserClass instead
-     */
-    public function getBasicLevelClass()
-    {
-        return $this->getUserClass();
-    }
-
-    /**
-     * {@inheritdoc}
-     * @deprecated since 2.3, use getBusinessUnitClass instead
-     */
-    public function getLocalLevelClass($deep = false)
-    {
-        return $this->getBusinessUnitClass();
-    }
-
-    /**
-     * {@inheritdoc}
-     * @deprecated since 2.3, use getOrganizationClass instead
-     */
-    public function getGlobalLevelClass()
-    {
-        return $this->getOrganizationClass();
     }
 
     /**

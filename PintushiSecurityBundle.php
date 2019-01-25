@@ -5,11 +5,8 @@ namespace Pintushi\Bundle\SecurityBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Pintushi\Component\DependencyInjection\Compiler\ServiceLinkCompilerPass;
-use Pintushi\Bundle\SecurityBundle\DependencyInjection\Compiler\AclConfigurationPass;
-use Pintushi\Bundle\SecurityBundle\DependencyInjection\Compiler\QueryHintResolverPass;
-use Pintushi\Bundle\SecurityBundle\DependencyInjection\Compiler\AclAnnotationProviderPass;
-use Pintushi\Bundle\SecurityBundle\DependencyInjection\Compiler\OwnershipDecisionMakerPass;
-use Pintushi\Bundle\SecurityBundle\DependencyInjection\Compiler\AclPrivilegeFilterPass;
+use Pintushi\Bundle\SecurityBundle\DependencyInjection\Compiler as CompilerPasses;
+
 
 final class PintushiSecurityBundle extends Bundle
 {
@@ -21,10 +18,11 @@ final class PintushiSecurityBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new ServiceLinkCompilerPass());
-        $container->addCompilerPass(new AclConfigurationPass());
-        $container->addCompilerPass(new QueryHintResolverPass());
-        $container->addCompilerPass(new AclAnnotationProviderPass());
-        $container->addCompilerPass(new OwnershipDecisionMakerPass());
-        $container->addCompilerPass(new AclPrivilegeFilterPass());
+        $container->addCompilerPass(new CompilerPasses\AclConfigurationPass());
+        $container->addCompilerPass(new CompilerPasses\QueryHintResolverPass());
+        $container->addCompilerPass(new CompilerPasses\AclAnnotationProviderPass());
+        $container->addCompilerPass(new CompilerPasses\OwnershipDecisionMakerPass());
+        $container->addCompilerPass(new CompilerPasses\AclPrivilegeFilterPass());
+        $container->addCompilerPass(new CompilerPasses\AccessRulesPass());
     }
 }

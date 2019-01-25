@@ -302,10 +302,9 @@ class EntityAclExtension extends AbstractAccessLevelAclExtension
             }
         }
 
-        //@todo: 为什么在ownership type 为BU， USER, Organization时，更改访问级别为Global?
-        // if (null !== $object) {
-        //     $result = $this->metadataProvider->getMaxAccessLevel($result, $this->getObjectClassName($object));
-        // }
+        if (null !== $object) {
+            $result = $this->metadataProvider->getMaxAccessLevel($result, $this->getObjectClassName($object));
+        }
 
         return $result;
     }

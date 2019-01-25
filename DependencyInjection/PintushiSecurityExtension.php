@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Pintushi\Bundle\SecurityBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
