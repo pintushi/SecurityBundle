@@ -244,10 +244,6 @@ abstract class AbstractAccessLevelAclExtension extends AbstractAclExtension
         OrganizationInterface $organization,
         $accessLevel
     ) {
-        if (AccessLevel::SYSTEM_LEVEL === $accessLevel) {
-            return false;
-        }
-
         $objectOrganizationId = $this->getOrganizationId($object);
 
         // check entity organization with current organization
