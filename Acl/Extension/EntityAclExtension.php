@@ -242,7 +242,7 @@ class EntityAclExtension extends AbstractAccessLevelAclExtension
                         $rootMask &= ~$this->removeServiceBits($mask);
                         $rootMask |= $maskBuilder->getMask('MASK_' . $permission . '_SYSTEM');
                     }
-                } elseif ($metadata->isGlobalLevelOwned()) {
+                } elseif ($metadata->isOrganizationOwned()) {
                     if ($this->getAccessLevel($mask) < AccessLevel::GLOBAL_LEVEL) {
                         $rootMask &= ~$this->removeServiceBits($mask);
                         $rootMask |= $maskBuilder->getMask('MASK_' . $permission . '_GLOBAL');
@@ -517,7 +517,7 @@ class EntityAclExtension extends AbstractAccessLevelAclExtension
             return $maskBuilder->get();
         }
 
-        if ($metadata->isGlobalLevelOwned()) {
+        if ($metadata->isOrganizationOwned()) {
             $maskBuilder = $this->getEntityMaskBuilder($identity);
 
             return

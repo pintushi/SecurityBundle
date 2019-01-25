@@ -24,8 +24,8 @@ entity_config:
                         options:
                             block:          other
                             required:       false
-                            label:          oro.security.field_acl.is_enabled.label
-                            tooltip:        oro.security.field_acl.is_enabled.tooltip
+                            label:          pintushi.security.field_acl.is_enabled.label
+                            tooltip:        pintushi.security.field_acl.is_enabled.tooltip
                 show_restricted_fields:
                     options:
                         default_value: false
@@ -40,8 +40,8 @@ entity_config:
                         options:
                             block:          other
                             required:       false
-                            label:          oro.security.field_acl.show_restricted_fields.label
-                            tooltip:        oro.security.field_acl.show_restricted_fields.tooltip
+                            label:          pintushi.security.field_acl.show_restricted_fields.label
+                            tooltip:        pintushi.security.field_acl.show_restricted_fields.tooltip
         field:
             items:
                 permissions: ~

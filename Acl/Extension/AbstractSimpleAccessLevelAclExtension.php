@@ -76,7 +76,7 @@ abstract class AbstractSimpleAccessLevelAclExtension extends AbstractAccessLevel
                         $rootMask &= ~$this->removeServiceBits($mask);
                         $rootMask |= $this->getMaskBuilderConst('MASK_' . $permission . '_SYSTEM');
                     }
-                } elseif ($metadata->isGlobalLevelOwned()) {
+                } elseif ($metadata->isOrganizationOwned()) {
                     if ($accessLevel < AccessLevel::GLOBAL_LEVEL) {
                         $rootMask &= ~$this->removeServiceBits($mask);
                         $rootMask |= $this->getMaskBuilderConst('MASK_' . $permission . '_GLOBAL');
@@ -140,7 +140,7 @@ abstract class AbstractSimpleAccessLevelAclExtension extends AbstractAccessLevel
             return $this->getMaskBuilderConst('GROUP_SYSTEM');
         }
 
-        if ($metadata->isGlobalLevelOwned()) {
+        if ($metadata->isOrganizationOwned()) {
             return
                 $this->getMaskBuilderConst('GROUP_SYSTEM')
                 | $this->getMaskBuilderConst('GROUP_GLOBAL');

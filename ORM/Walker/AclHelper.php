@@ -9,13 +9,14 @@ use Pintushi\Bundle\SecurityBundle\Authentication\Token\OrganizationContextToken
 use Pintushi\Bundle\UserBundle\Entity\UserInterface;
 use Oro\Component\DoctrineUtils\ORM\QueryUtil;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Videni\Bundle\RestBundle\Util\AclHelperInterface;
 
 /**
  * This class adds the AccessRuleWalker tree walker with context to query to add ACL restrictions.
  *
  * @see \Pintushi\Bundle\SecurityBundle\ORM\Walker\AccessRuleWalker
  */
-class AclHelper
+class AclHelper implements AclHelperInterface
 {
     public const CHECK_ROOT_ENTITY = 'checkRootEntity';
     public const CHECK_RELATIONS   = 'checkRelations';
