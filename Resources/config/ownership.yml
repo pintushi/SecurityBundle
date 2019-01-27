@@ -6,11 +6,13 @@ parameters:
 
 services:
     Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessor:
+        public: true
         class: Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessor
         arguments:
             - '@security.token_storage'
 
     pintushi_security.token_accessor:
+        public: true
         alias:  'Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessor'
 
     Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface: '@Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessor'
