@@ -241,6 +241,7 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
         if ($object instanceof DomainObjectWrapper) {
             $object = $object->getDomainObject();
         }
+
         $result = false;
         $triggeredAce = null;
         $triggeredMask = 0;
@@ -262,10 +263,8 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
                     }
 
                     $isAceApplicable = $this->isAceApplicable($requiredMask, $ace, $extension);
-
                     if ($isAceApplicable) {
                         $isGranting = $ace->isGranting();
-
                         if (self::PERMISSION !== $ace->getStrategy()) {
                             // give an additional chance for the appropriate ACL extension to decide
                             // whether an access to a domain object is granted or not
@@ -276,11 +275,21 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
                         }
 
                         if ($isGranting) {
-                            // the access is granted if there is at least one granting ACE
-                            $triggeredAce = $ace;
-                            $triggeredMask = $requiredMask;
-
+                            // override previous not granted triggered ace
+                            if (!$result) {
+                                $triggeredAce = $ace;
+                                $triggeredMask = $requiredMask;
+                            }
                             $result = true;
+
+                            // the access is granted if there is at least one granting ACE
+                            if (null === $triggeredAce
+                                || $extension->getAccessLevel($requiredMask, null, $object)
+                                > $extension->getAccessLevel($triggeredMask, null, $object)
+                            ) {
+                                $triggeredAce = $ace;
+                                $triggeredMask = $requiredMask;
+                            }
                         } elseif (null === $triggeredAce) {
                             // remember the first denying ACE
                             $triggeredAce = $ace;
@@ -288,7 +297,7 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
                         }
                     } elseif (null !== $isAceApplicable) {
                         $permissionGroupMask = $this->getPermissionGroupMask($requiredMask, $extension);
-                        if (null !== $permissionGroupMask && 0 === ($permissionGroupMask & $ace->getMask())) {
+                        if (null !== $permissionGroupMask && 0 === ($permissionGroupMask & $ace->getMask()) && !$result) {
                             $triggeredAce = $ace;
                             $triggeredMask = $requiredMask;
                         }
