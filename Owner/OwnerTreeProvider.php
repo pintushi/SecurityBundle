@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Pintushi\Bundle\EntityConfigBundle\Config\DatabaseChecker;
 use Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Pintushi\Bundle\UserBundle\Entity\User;
-use Pintushi\Component\DoctrineUtils\ORM\QueryUtil;
+use Oro\Component\DoctrineUtils\ORM\QueryUtil;
 
 class OwnerTreeProvider extends AbstractOwnerTreeProvider
 {

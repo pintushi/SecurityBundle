@@ -7,7 +7,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Pintushi\Component\DependencyInjection\Compiler\ServiceLinkCompilerPass;
 use Pintushi\Bundle\SecurityBundle\DependencyInjection\Compiler as CompilerPasses;
 
-
 final class PintushiSecurityBundle extends Bundle
 {
     /**

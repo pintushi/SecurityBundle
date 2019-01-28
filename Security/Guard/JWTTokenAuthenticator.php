@@ -32,7 +32,7 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Pintushi\Bundle\SecurityBundle\Authentication\Token\OrganizationToken;
 
 /**
- * 拷贝至LexikJwtBundle, 添加organization到token中。
+ * A copy from LexikJwtBundle, add organization to token。
  *
  */
 class JWTTokenAuthenticator extends AbstractGuardAuthenticator
