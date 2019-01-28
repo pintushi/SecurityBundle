@@ -13,7 +13,7 @@ class OrganizationToken extends JWTUserToken implements OrganizationContextToken
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $roles = [], UserInterface $user = null, $rawToken = null, $providerKey = null, OrganizationInterface $organization = null)
+    public function __construct(OrganizationInterface $organization, array $roles = [], UserInterface $user = null, $rawToken = null, $providerKey = null)
     {
         parent::__construct($roles, $user, $rawToken, $providerKey);
 

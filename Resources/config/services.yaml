@@ -58,3 +58,4 @@ services:
             - "@lexik_jwt_authentication.jwt_manager"
             - "@event_dispatcher"
             - "@lexik_jwt_authentication.extractor.chain_extractor"
+

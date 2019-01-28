@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Pintushi\Bundle\SecurityBundle\Acl\Persistence\AclManager;
 use Symfony\Component\Translation\TranslatorInterface;
+use Pintushi\Bundle\SecurityBundle\Event\OrganizationSwitchAfter;
+use Pintushi\Bundle\SecurityBundle\Event\OrganizationSwitchBefore;
 
 class AclPermissionController extends Controller
 {

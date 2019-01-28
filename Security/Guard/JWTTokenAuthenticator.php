@@ -30,6 +30,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Pintushi\Bundle\SecurityBundle\Authentication\Token\OrganizationToken;
+use Pintushi\Bundle\OrganizationBundle\Repository\OrganizationRepository;
 
 /**
  * A copy from LexikJwtBundle, add organization to token。
@@ -57,6 +58,8 @@ class JWTTokenAuthenticator extends AbstractGuardAuthenticator
      */
     private $preAuthenticationTokenStorage;
 
+    private $organizationRepository;
+
     /**
      * @param JWTTokenManagerInterface $jwtManager
      * @param EventDispatcherInterface $dispatcher
@@ -65,12 +68,14 @@ class JWTTokenAuthenticator extends AbstractGuardAuthenticator
     public function __construct(
         JWTTokenManagerInterface $jwtManager,
         EventDispatcherInterface $dispatcher,
-        TokenExtractorInterface $tokenExtractor
+        TokenExtractorInterface $tokenExtractor,
+        OrganizationRepository $organizationRepository
     ) {
         $this->jwtManager                    = $jwtManager;
         $this->dispatcher                    = $dispatcher;
         $this->tokenExtractor                = $tokenExtractor;
         $this->preAuthenticationTokenStorage = new TokenStorage();
+        $this->organizationRepository = $organizationRepository;
     }
 
     public function supports(Request $request)
@@ -220,7 +225,15 @@ class JWTTokenAuthenticator extends AbstractGuardAuthenticator
             throw new \RuntimeException('Unable to return an authenticated token since there is no pre authentication token.');
         }
 
-        $authToken = new OrganizationToken($user->getRoles(), $user, $preAuthToken->getCredentials(), $providerKey, $user->getOrganization());
+        $payload = $preAuthToken->getPayload();
+
+        $organization =  $user->getOrganization();
+
+        if (isset($payload['organization']) && $id = $payload['organization']) {
+            $organization = $this->organizationRepository->find($id);
+        }
+
+        $authToken = new OrganizationToken($organization, $user->getRoles(), $user, $preAuthToken->getCredentials(), $providerKey);
 
         $this->dispatcher->dispatch(Events::JWT_AUTHENTICATED, new JWTAuthenticatedEvent($preAuthToken->getPayload(), $authToken));
         $this->preAuthenticationTokenStorage->setToken(null);
