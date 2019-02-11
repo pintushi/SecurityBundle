@@ -59,3 +59,13 @@ services:
             - "@event_dispatcher"
             - "@lexik_jwt_authentication.extractor.chain_extractor"
 
+    Pintushi\Bundle\SecurityBundle\Form\FieldAclHelper: ~
+
+    Pintushi\Bundle\SecurityBundle\Form\Extension\AclProtectedTypeExtension:
+        tags:
+            - { name: 'form.type_extension', extended_type: 'Symfony\Bridge\Doctrine\Form\Type\EntityType' }
+
+    Pintushi\Bundle\SecurityBundle\Form\Extension\AclProtectedFieldTypeExtension:
+        tags:
+            - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+

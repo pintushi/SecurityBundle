@@ -28,6 +28,8 @@ services:
         calls:
             - [setDefaultProvider, ['@pintushi_security.owner.ownership_metadata_provider']]
 
+    Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface: '@pintushi_security.owner.ownership_metadata_provider.chain'
+
     pintushi_security.owner.ownership_metadata_provider:
         class: 'Pintushi\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider'
         arguments:
