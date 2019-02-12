@@ -69,3 +69,15 @@ services:
         tags:
             - { name: 'form.type_extension', extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
 
+    Pintushi\Bundle\SecurityBundle\Authorization\RequestAuthorizationChecker: ~
+
+    Pintushi\Bundle\SecurityBundle\Request\ParamConverter\DoctrineParamConverter:
+        autowire: false
+        autoconfigure: false
+        public: false
+        decorates: 'sensio_framework_extra.converter.doctrine.orm'
+        parent: 'sensio_framework_extra.converter.doctrine.orm'
+        arguments:
+            - []
+            - '@Pintushi\Bundle\SecurityBundle\Authorization\RequestAuthorizationChecker'
+

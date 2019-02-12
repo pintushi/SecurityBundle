@@ -206,11 +206,13 @@ services:
              - [setSecurityMetadataProvider, ["@pintushi_security.entity_security_metadata_provider"]]
              - [setContext, ["@?pintushi_security.acl.voter_link"]]
 
-    pintushi_security.acl.annotation_provider:
-        class: Pintushi\Bundle\SecurityBundle\Metadata\AclAnnotationProvider
+    Pintushi\Bundle\SecurityBundle\Metadata\AclAnnotationProvider:
         arguments:
             - '@pintushi.orm.entity_class_resolver'
             - '@pintushi_security.acl.annotation_provider.cache'
+
+    pintushi_security.acl.annotation_provider:
+        alias: 'Pintushi\Bundle\SecurityBundle\Metadata\AclAnnotationProvider'
 
     pintushi_security.acl.annotation_provider.cache:
         public: false
