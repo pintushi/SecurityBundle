@@ -5,10 +5,10 @@ namespace Pintushi\Bundle\SecurityBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Pintushi\Bundle\SecurityBundle\Metadata\AclAnnotationProvider;
 
 class AclAnnotationProviderPass implements CompilerPassInterface
 {
-    const PROVIDER_SERVICE_NAME = 'pintushi_security.acl.annotation_provider';
     const TAG_NAME              = 'pintushi_security.acl.config_loader';
 
     /**
@@ -16,11 +16,11 @@ class AclAnnotationProviderPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition(self::PROVIDER_SERVICE_NAME)) {
+        if (!$container->hasDefinition(AclAnnotationProvider::class)) {
             return;
         }
 
-        $providerDef = $container->getDefinition(self::PROVIDER_SERVICE_NAME);
+        $providerDef = $container->getDefinition(AclAnnotationProvider::class);
 
         $loaders = $container->findTaggedServiceIds(self::TAG_NAME);
         foreach ($loaders as $id => $attributes) {

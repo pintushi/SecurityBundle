@@ -6,7 +6,7 @@ use Doctrine\Common\Cache\CacheProvider;
 use Pintushi\Bundle\SecurityBundle\ORM\EntityClassResolver;
 use Pintushi\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Pintushi\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Pintushi\Bundle\OrganizationBundle\Ownership\OwnershipType;
+use Pintushi\Bundle\OrganizationBundle\Form\Type\OwnershipType;
 use Pintushi\Bundle\SecurityBundle\Acl\AccessLevel;
 use Pintushi\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Pintushi\Bundle\UserBundle\Entity\User;
