@@ -6,17 +6,16 @@
     "license": "MIT",
     "require": {
         "php": "^7.1",
-        "symfony/symfony": "^4.0",
-        "ass/xmlsecurity": "dev-master",
+        "symfony/framework-bundle": "^4.0",
+        "ass/xmlsecurity": "^1.0@dev",
         "oro/config": "^1.0@dev",
         "sensio/framework-extra-bundle": "^5.2",
         "pintushi/entity-config-bundle": "^1.0@dev",
         "lexik/jwt-authentication-bundle": "^2.0@dev"
     },
     "autoload": {
-        "psr-0": { "Pintushi\\Bundle\\SecurityBundle": "" }
+        "psr-4": { "Pintushi\\Bundle\\SecurityBundle\\": "" }
     },
-    "target-dir": "Pintushi/Bundle/SecurityBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
