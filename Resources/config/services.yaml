@@ -81,3 +81,9 @@ services:
             - []
             - '@Pintushi\Bundle\SecurityBundle\Authorization\RequestAuthorizationChecker'
 
+    Pintushi\Bundle\SecurityBundle\Helper\GrantedInfoHelper:
+        arguments:
+            - '@pintushi.acl.voter.basic_permissions'
+            - '@pintushi_security.authorization_checker'
+            - '@pintushi_security.token_accessor'
+
