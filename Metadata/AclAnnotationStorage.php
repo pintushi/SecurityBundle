@@ -12,7 +12,7 @@ class AclAnnotationStorage implements \Serializable
      *   key = annotation id
      *   value = annotation object
      */
-    private $annotations = array();
+    protected $annotations = array();
 
     /**
      * @var string[]
@@ -21,7 +21,7 @@ class AclAnnotationStorage implements \Serializable
      *              key = method name ('!' for class if it have an annotation)
      *              value = annotation id bound to the method
      */
-    private $classes = array();
+    protected $classes = array();
 
     /**
      * Gets an annotation by its id
