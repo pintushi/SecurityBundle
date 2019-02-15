@@ -87,3 +87,11 @@ services:
             - '@pintushi_security.authorization_checker'
             - '@pintushi_security.token_accessor'
 
+    pintushi.jwt_authentication.handler.authentication_success:
+        class: Pintushi\Bundle\SecurityBundle\Security\Http\Authentication\AuthenticationSuccessHandler
+        arguments:
+            - '@lexik_jwt_authentication.jwt_manager'
+            - '@event_dispatcher'
+        tags:
+            - {  name: "monolog.logger", channel: "security" }
+
