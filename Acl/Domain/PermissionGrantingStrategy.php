@@ -68,8 +68,8 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
     /** @var AuditLoggerInterface */
     protected $auditLogger;
 
-    /** @var ServiceLink */
-    private $securityMetadataProviderLink;
+    /** @var EntitySecurityMetadataProvider */
+    private $securityMetadataProvider;
 
     /** @var ServiceLink */
     private $contextLink;
@@ -89,7 +89,7 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
      */
     public function setSecurityMetadataProvider(EntitySecurityMetadataProvider $entitySecurityMetadataProvider)
     {
-        $this->entitySecurityMetadataProvider = $entitySecurityMetadataProvider;
+        $this->securityMetadataProvider = $entitySecurityMetadataProvider;
     }
 
     /**
@@ -403,6 +403,6 @@ class PermissionGrantingStrategy implements PermissionGrantingStrategyInterface
      */
     protected function getSecurityMetadataProvider()
     {
-        return $this->securityMetadataProviderLink->getService();
+        return $this->securityMetadataProvider;
     }
 }
