@@ -22,7 +22,7 @@ class ChainAclGroupProvider implements AclGroupProviderInterface
     }
 
     /**
-     * Adds all providers that marked by tag: oro_security.acl.group_provider
+     * Adds all providers that marked by tag: pintushi_security.acl.group_provider
      *
      * @param string $alias
      * @param AclGroupProviderInterface $provider

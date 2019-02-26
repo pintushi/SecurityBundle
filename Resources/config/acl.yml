@@ -129,7 +129,7 @@ services:
             - [ setBaseAclManager, [ '@pintushi_security.acl.base_manager' ] ]
 
     pintushi_security.link.sid_manager:
-        class: Pintushi\Component\DependencyInjection\ServiceLink
+        class: Oro\Component\DependencyInjection\ServiceLink
         tags:
             - { name: service_link, service: Pintushi\Bundle\SecurityBundle\Acl\Persistence\AclManager }
 
@@ -194,7 +194,7 @@ services:
             - '@pintushi_security.entity_security_metadata_provider'
 
     pintushi_security.acl.voter_link:
-        class: Pintushi\Component\DependencyInjection\ServiceLink
+        class: Oro\Component\DependencyInjection\ServiceLink
         tags:
             - { name: service_link, service: pintushi.acl.voter.basic_permissions }
 

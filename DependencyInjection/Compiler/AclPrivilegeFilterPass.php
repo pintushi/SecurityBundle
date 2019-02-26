@@ -2,7 +2,7 @@
 
 namespace Pintushi\Bundle\SecurityBundle\DependencyInjection\Compiler;
 
-use Pintushi\Component\DependencyInjection\Compiler\TaggedServicesCompilerPassTrait;
+use Oro\Component\DependencyInjection\Compiler\TaggedServicesCompilerPassTrait;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

@@ -22,7 +22,7 @@ class ChainOwnershipMetadataProvider implements OwnershipMetadataProviderInterfa
     protected $emulatedProvider;
 
     /**
-     * Adds all providers that marked by tag: oro_security.owner.metadata_provider
+     * Adds all providers that marked by tag: pintushi_security.owner.metadata_provider
      *
      * @param string $alias
      * @param OwnershipMetadataProviderInterface $provider

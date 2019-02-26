@@ -26,7 +26,7 @@ class ChainEntityOwnershipDecisionMaker implements AccessLevelOwnershipDecisionM
     }
 
     /**
-     * Adds all decision makers marked by tag: oro_security.owner.ownership_decision_maker
+     * Adds all decision makers marked by tag: pintushi_security.owner.ownership_decision_maker
      *
      * @param AccessLevelOwnershipDecisionMakerInterface $ownershipDecisionMakers
      */

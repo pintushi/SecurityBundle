@@ -11,7 +11,7 @@ use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 
 use Pintushi\Bundle\SecurityBundle\Acl\Extension\AclExtensionInterface;
 use Pintushi\Bundle\SecurityBundle\Metadata\EntitySecurityMetadataProvider;
-use Pintushi\Component\DependencyInjection\ServiceLink;
+use Oro\Component\DependencyInjection\ServiceLink;
 
 /**
  * The ACL extensions based permission granting strategy to apply to the access control list.

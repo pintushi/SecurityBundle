@@ -3,7 +3,7 @@
 namespace Pintushi\Bundle\SecurityBundle\DependencyInjection\Compiler;
 
 use Pintushi\Bundle\SecurityBundle\Authorization\AuthorizationChecker;
-use Pintushi\Component\DependencyInjection\ServiceLink;
+use Oro\Component\DependencyInjection\ServiceLink;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

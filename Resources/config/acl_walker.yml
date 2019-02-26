@@ -9,7 +9,7 @@ services:
         arguments:
              - '@service_container'
 
-    pintushi.acl_helper:
+    pintushi_security.acl_helper:
         alias:  'Pintushi\Bundle\SecurityBundle\ORM\Walker\AclHelper'
 
     Videni\Bundle\RestBundle\Util\AclHelperInterface: '@Pintushi\Bundle\SecurityBundle\ORM\Walker\AclHelper'
@@ -31,6 +31,8 @@ services:
     Pintushi\Bundle\SecurityBundle\ORM\Walker\CurrentUserWalkerHintProvider:
         arguments:
              - '@pintushi_security.token_accessor'
+
+    pintushi_security.walker_hint_provider.current_user: '@Pintushi\Bundle\SecurityBundle\ORM\Walker\CurrentUserWalkerHintProvider'
 
     pintushi_security.query_hint.filter_by_current_user:
         public: false
