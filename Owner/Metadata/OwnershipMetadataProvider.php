@@ -105,6 +105,12 @@ class OwnershipMetadataProvider extends AbstractOwnershipMetadataProvider
     public function getMaxAccessLevel($accessLevel, $className = null)
     {
         if (AccessLevel::SYSTEM_LEVEL === $accessLevel && $className) {
+            $organization = $this->tokenAccessor->getOrganization();
+            //Don't fix access level for global organization
+            if($organization->isGlobal()) {
+                return $accessLevel;
+            }
+
             $metadata = $this->getMetadata($className);
             if ($metadata->hasOwner()
                 && in_array(
