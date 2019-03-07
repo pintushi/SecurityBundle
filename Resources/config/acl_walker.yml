@@ -12,8 +12,6 @@ services:
     pintushi_security.acl_helper:
         alias:  'Pintushi\Bundle\SecurityBundle\ORM\Walker\AclHelper'
 
-    Videni\Bundle\RestBundle\Util\AclHelperInterface: '@Pintushi\Bundle\SecurityBundle\ORM\Walker\AclHelper'
-
     pintushi_security.orm.ownership_sql_walker_builder:
         public: false
         class: 'Pintushi\Bundle\SecurityBundle\ORM\Walker\OwnershipConditionDataBuilder'
