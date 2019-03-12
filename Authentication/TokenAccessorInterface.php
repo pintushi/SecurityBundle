@@ -3,7 +3,6 @@
 namespace Pintushi\Bundle\SecurityBundle\Authentication;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
 use Pintushi\Bundle\OrganizationBundle\Entity\Organization;
 use Pintushi\Bundle\UserBundle\Entity\User;
 
