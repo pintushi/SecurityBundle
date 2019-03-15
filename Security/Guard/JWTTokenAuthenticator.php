@@ -228,7 +228,7 @@ class JWTTokenAuthenticator extends AbstractGuardAuthenticator
         $payload = $preAuthToken->getPayload();
 
         $organization =  $user->getOrganization();
-
+        //@todo: Security issue!, payload can be modified by client, fix this ASAP.
         if (isset($payload['organization']) && $id = $payload['organization']) {
             $organization = $this->organizationRepository->find($id);
         }
