@@ -46,7 +46,6 @@ class SwitchOrganizationAction  extends Controller
             !$organization->isEnabled() ||
             !$token->getUser()->getOrganizations()->contains($organization)
         ) {
-            breakhere();
             throw new AccessDeniedException(
                 $this->translator->trans(
                     'pintushi.security.organization.access_denied',
