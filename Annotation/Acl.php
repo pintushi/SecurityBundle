@@ -242,7 +242,8 @@ class Acl implements \Serializable
                 $this->group,
                 $this->label,
                 $this->description,
-                $this->category
+                $this->category,
+                $this->bindings
             )
         );
     }
@@ -262,7 +263,7 @@ class Acl implements \Serializable
             $this->label,
             $this->description,
             $this->category,
-            $this->bindings,
+            $this->bindings
             ) = unserialize($serialized);
     }
 
