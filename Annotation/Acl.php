@@ -53,6 +53,8 @@ class Acl implements \Serializable
      */
     private $category;
 
+    protected $bindings = [];
+
     /**
      * Constructor
      *
@@ -84,6 +86,7 @@ class Acl implements \Serializable
         $this->label          = isset($data['label']) ? $data['label'] : '';
         $this->description    = isset($data['description']) ? $data['description'] : '';
         $this->category       = isset($data['category']) ? $data['category'] : '';
+        $this->bindings       = isset($data['bindings']) ? $data['bindings'] : [];
     }
 
     /**
@@ -204,6 +207,26 @@ class Acl implements \Serializable
         $this->category = $category;
     }
 
+     /**
+     * @return mixed
+     */
+    public function getBindings()
+    {
+        return $this->bindings;
+    }
+
+    /**
+     * @param mixed $bindings
+     *
+     * @return self
+     */
+    public function setBindings($bindings)
+    {
+        $this->bindings = $bindings;
+
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -238,7 +261,8 @@ class Acl implements \Serializable
             $this->group,
             $this->label,
             $this->description,
-            $this->category
+            $this->category,
+            $this->bindings,
             ) = unserialize($serialized);
     }
 
@@ -261,6 +285,7 @@ class Acl implements \Serializable
         $result->label          = $data['label'];
         $result->description    = $data['description'];
         $result->category       = $data['category'];
+        $result->bindings       = $data['bindings'];
 
         return $result;
     }
