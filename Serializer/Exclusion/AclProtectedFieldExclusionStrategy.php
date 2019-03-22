@@ -47,6 +47,6 @@ class AclProtectedFieldExclusionStrategy implements ExclusionStrategyInterface
 
         $this->cache[$class][$name] = $isFieldViewGranted;
 
-        return $isFieldViewGranted;
+        return !$isFieldViewGranted;
     }
 }
