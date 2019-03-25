@@ -97,8 +97,6 @@ services:
 
     pintushi_security.listener.serialization_listener:
           class: 'Pintushi\Bundle\SecurityBundle\EventListener\SerializationContextListener'
-          arguments:
-              - '@pintushi_security.owner.ownership_metadata_provider'
           tags:
               - { name: kernel.event_listener, event: videni_rest.serialization_context, method: addAclProtectedFieldExclusionStrategy }
 
