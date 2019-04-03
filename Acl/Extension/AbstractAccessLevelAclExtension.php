@@ -7,7 +7,6 @@ use Symfony\Component\Security\Acl\Exception\InvalidDomainObjectException;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Acl\Util\ClassUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
 use Pintushi\Bundle\SecurityBundle\Exception\InvalidEntityException;
 use Pintushi\Bundle\SecurityBundle\Acl\AccessLevel;
 use Pintushi\Bundle\SecurityBundle\Acl\Domain\DomainObjectReference;

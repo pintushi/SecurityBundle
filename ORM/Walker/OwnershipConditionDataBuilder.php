@@ -16,6 +16,7 @@ use Pintushi\Bundle\SecurityBundle\Owner\OwnerTree;
 use Pintushi\Bundle\SecurityBundle\Owner\OwnerTreeProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Pintushi\Bundle\OrganizationBundle\Provider\RequestBasedOrganizationProvider;
 
 /**
  * Default ownership condition builder
@@ -36,6 +37,8 @@ class OwnershipConditionDataBuilder extends AbstractOwnershipConditionDataBuilde
     /** @var OwnerTreeProviderInterface */
     protected $treeProvider;
 
+    protected $requestBasedOrganizationProvider;
+
     /** @var AclGroupProviderInterface */
     protected $aclGroupProvider;
 
@@ -55,6 +58,7 @@ class OwnershipConditionDataBuilder extends AbstractOwnershipConditionDataBuilde
         EntitySecurityMetadataProvider $entityMetadataProvider,
         OwnershipMetadataProviderInterface $metadataProvider,
         OwnerTreeProviderInterface $treeProvider,
+        RequestBasedOrganizationProvider $organizationProvider,
         AclVoter $aclVoter = null
     ) {
         $this->authorizationChecker = $authorizationChecker;
@@ -63,6 +67,7 @@ class OwnershipConditionDataBuilder extends AbstractOwnershipConditionDataBuilde
         $this->objectIdAccessor = $objectIdAccessor;
         $this->entityMetadataProvider = $entityMetadataProvider;
         $this->metadataProvider = $metadataProvider;
+        $this->requestBasedOrganizationProvider = $organizationProvider;
         $this->treeProvider = $treeProvider;
     }
 
@@ -115,6 +120,22 @@ class OwnershipConditionDataBuilder extends AbstractOwnershipConditionDataBuilde
     }
 
     /**
+     * Gets the id of logged in user
+     *
+     * @return int|string|null
+     */
+    public function getUserId()
+    {
+        $user = $this->getUser();
+
+        if ($user) {
+            return $this->objectIdAccessor->getId($user);
+        }
+
+        return null;
+    }
+
+    /**
      * @param  string                     $targetEntityClassName
      * @param  int                        $accessLevel
      * @param  OwnershipMetadataInterface $metadata
@@ -134,7 +155,7 @@ class OwnershipConditionDataBuilder extends AbstractOwnershipConditionDataBuilde
         $constraint = null;
 
         if (AccessLevel::SYSTEM_LEVEL === $accessLevel) {
-            $constraint = [];
+            $constraint = $this->getOrganizationFromRequest() ? $this->getCondition([], $metadata, null, true): [];
         } elseif (!$metadata->hasOwner()) {
             if (AccessLevel::GLOBAL_LEVEL === $accessLevel) {
                 if ($this->metadataProvider->getOrganizationClass() === $targetEntityClassName) {
@@ -198,6 +219,10 @@ class OwnershipConditionDataBuilder extends AbstractOwnershipConditionDataBuilde
      */
     protected function getOrganizationId(OwnershipMetadataInterface $metadata = null)
     {
+        if ($organization = $this->getOrganizationFromRequest()) {
+            return $organization->getId();
+        }
+
         $token = $this->tokenStorage->getToken();
         if ($token instanceof OrganizationContextTokenInterface) {
             return $token->getOrganizationContext()->getId();
@@ -206,20 +231,18 @@ class OwnershipConditionDataBuilder extends AbstractOwnershipConditionDataBuilde
         return null;
     }
 
-    /**
-     * Gets the id of logged in user
-     *
-     * @return int|string|null
-     */
-    public function getUserId()
+    protected function getOrganizationFromRequest()
     {
-        $user = $this->getUser();
-
-        if ($user) {
-            return $this->objectIdAccessor->getId($user);
+        if (!$this->requestBasedOrganizationProvider->isEnabledForAclConditionDataBuilder()) {
+            return null;
         }
 
-        return null;
+        $organization = null;
+        if($this->requestBasedOrganizationProvider->hasIdentifier()) {
+            $organization = $this->requestBasedOrganizationProvider->getOrganizationFromRequest();
+        }
+
+        return $organization;
     }
 
     /**
