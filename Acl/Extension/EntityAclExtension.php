@@ -5,7 +5,6 @@ namespace Pintushi\Bundle\SecurityBundle\Acl\Extension;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Util\ClassUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
 use Pintushi\Bundle\SecurityBundle\ORM\EntityClassResolver;
 use Pintushi\Bundle\SecurityBundle\Acl\AccessLevel;
 use Pintushi\Bundle\SecurityBundle\Acl\Domain\ObjectIdAccessor;
@@ -531,7 +530,7 @@ class EntityAclExtension extends AbstractAccessLevelAclExtension
                 | $maskBuilder->getMask('GROUP_GLOBAL')
                 | $maskBuilder->getMask('GROUP_DEEP')
                 | $maskBuilder->getMask('GROUP_LOCAL');
-        } elseif ($metadata->isBasicLevelOwned()) {
+        } elseif ($metadata->isUserOwned()) {
             $maskBuilder = $this->getEntityMaskBuilder($identity);
 
             return

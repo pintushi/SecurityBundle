@@ -150,7 +150,7 @@ abstract class AbstractSimpleAccessLevelAclExtension extends AbstractAccessLevel
                 | $this->getMaskBuilderConst('GROUP_GLOBAL')
                 | $this->getMaskBuilderConst('GROUP_DEEP')
                 | $this->getMaskBuilderConst('GROUP_LOCAL');
-        } elseif ($metadata->isBasicLevelOwned()) {
+        } elseif ($metadata->isUserOwned()) {
             return
                 $this->getMaskBuilderConst('GROUP_SYSTEM')
                 | $this->getMaskBuilderConst('GROUP_GLOBAL')

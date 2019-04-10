@@ -121,7 +121,7 @@ abstract class AbstractAccessLevelAclExtension extends AbstractAclExtension
                 $organization
             );
         } else {
-            if ($metadata->isBasicLevelOwned()) {
+            if ($metadata->isUserOwned()) {
                 $result = $this->decisionMaker->isAssociatedWithBasicLevelEntity(
                     $user,
                     $object,
