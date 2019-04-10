@@ -237,12 +237,7 @@ class OwnershipConditionDataBuilder extends AbstractOwnershipConditionDataBuilde
             return null;
         }
 
-        $organization = null;
-        if($this->requestBasedOrganizationProvider->hasIdentifier()) {
-            $organization = $this->requestBasedOrganizationProvider->getOrganizationFromRequest();
-        }
-
-        return $organization;
+        return $this->requestBasedOrganizationProvider->getOrganizationFromRequest();
     }
 
     /**
